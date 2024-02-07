@@ -2,6 +2,13 @@
 # This dictionary defines constants representing groups of joints.
 # Each key represents a group of joints, and the corresponding value is a tuple containing the joint indices.
 
+# RE_SH_H: Tuple representing the indices of landmarks for the right elbow, shoulder, and hip joints.
+# LE_SH_H: Tuple representing the indices of landmarks for the left elbow, shoulder, and hip joints.
+# RW_E_SH: Tuple representing the indices of landmarks for the right wrist, elbow, and shoulder joints.
+# LW_E_SH: Tuple representing the indices of landmarks for the left wrist, elbow, and shoulder joints.
+# RH_K_A: Tuple representing the indices of landmarks for the right hip, knee, and ankle joints.
+# LH_K_A: Tuple representing the indices of landmarks for the left hip, knee, and ankle joints.
+
 JOINT_CONSTANTS = {
     "RIGHT_ELBOW_SHOULDER_HIP": (
         14,
