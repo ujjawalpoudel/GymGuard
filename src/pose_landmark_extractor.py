@@ -67,6 +67,12 @@ class PoseLandmarkExtractor:
                         landmark.z,
                         landmark.visibility,
                         frame_time,
+                        angle_of_joint["right_elbow_shoulder_hip"],
+                        angle_of_joint["left_elbow_shoulder_hip"],
+                        angle_of_joint["right_wrist_elbow_shoulder"],
+                        angle_of_joint["left_wrist_elbow_shoulder"],
+                        angle_of_joint["right_hip_knee_ankle"],
+                        angle_of_joint["left_hip_knee_ankle"],
                     ]
                 )
 
