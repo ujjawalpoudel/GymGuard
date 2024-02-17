@@ -13,9 +13,10 @@ GymGuard is an innovative AI assistant that ensures users perform exercises corr
 Our motivation is to empower individuals to exercise confidently, even without direct assistance. GymGuard aims to create a supportive environment for users to learn, improve, and stay motivated on their fitness journey.
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project, you must add the following environment variables to your .env file.
 
-`VIDEO_FILE_NAME=barbell_row.mp4`
+`VIDEO_FILE_NAME=barbell_dead_row_65906101_s05_13ang.mp4`
+with the file format of `exerciseName_cameraId_personId_features`
 
 
 ## Run Locally
