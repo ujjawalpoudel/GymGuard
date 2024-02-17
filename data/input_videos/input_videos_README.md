@@ -1,7 +1,6 @@
 # Input Videos
 
-## Welcome
-Greetings, and welcome to the `input_videos` directory! Here, you'll find a designated space for storing videos tailored for video training or data extraction for further operations.
+Welcome to the `input_videos` directory! Here, you'll find a designated space for storing videos tailored for video training or data extraction for further operations.
 
 ## Usage Instructions
 Kindly save your video files within this repository if they are intended for any of the following purposes:
