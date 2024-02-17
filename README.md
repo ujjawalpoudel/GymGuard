@@ -1,64 +1,34 @@
-# GymGuard: AI-Powered Exercise Assistant
-Welcome to GymGuard, your AI exercise assistant designed to guide individuals, especially beginners, through their fitness journey. The primary goal of this project is to assist those new to the gym environment or who prefer working out independently.
+This project is to critique an exercise by using an ensemble of ML/Vision models. Mainly focuses on orientation and angle of joints based on the human pose estimate (33 Joints)
 
-## Project Overview
-GymGuard is an innovative AI assistant that ensures users perform exercises correctly and effectively. Whether you are a fitness beginner or prefer solo workouts, GymGuard is here to enhance your exercise experience.
+## Key Milestones
+1. Repetition detection model
+2. Orientation and symmetry model
+3. Threshold predictor for training step
 
-## Key Features
-* **Movement Tracking**: GymGuard uses AI to monitor and analyze your real-time exercise movements.
-* **Corrective Feedback**: Receive instant feedback if your exercise form is incorrect, helping you avoid injuries and optimize your workouts.
-* **Repetition Counting**: Keep track of your exercise repetitions, empowering you to set and achieve fitness goals.
-
-## Motivation
-Our motivation is to empower individuals to exercise confidently, even without direct assistance. GymGuard aims to create a supportive environment for users to learn, improve, and stay motivated on their fitness journey.
 ## Environment Variables
 
-To run this project, you must add the following environment variables to your .env file.
-
+To run this project, ensure the following environment variable is set in your .env file:
 `VIDEO_FILE_NAME=barbell_dead_row_65906101_s05_13ang.mp4`
-with the file format of `exerciseName_cameraId_personId_features`
 
 
-## Run Locally
+with the file format of `exerciseName_cameraId_personId_features.`
 
-Clone the project
-
-```bash
-  git clone https://github.com/ujjawalpoudel/GymGuard
-```
-
-Go to the project directory
-
-```bash
-  cd GymGuard
-```
-
-Create a Virtual Environment
-```bash
-  python3.11 -m venv gymguardenv
-```
-
-Activate Virtual Environment
-```bash
-  source gymguardenv/bin/activate
-```
-
-Install dependencies
-
-```bash
-  pip install -r requirements.txt
-```
-
-Start the server
-
-```bash
-  python main.py
-```
+- exerciseName: barbell_dead_row
+- cameraId: 65906101
+- personId: s05
+- features: 13ang
 
 
-## Authors
+# Contributors
 
 - [@ujjawalpoudel](https://github.com/ujjawalpoudel)
 - [@Shanover77](https://github.com/Shanover77)
 - [@Sunilrai486](https://github.com/Sunilrai486)
+
+## References
+
+Mihai Fieraru, Mihai Zanfir, Silviu-Cristian Pirlea, Vlad Olaru, and Cristian Sminchisescu.  
+"AIFit: Automatic 3D Human-Interpretable Feedback Models for Fitness Training."  
+In *The IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, June 2021.  
+[Link to the paper](https://openaccess.thecvf.com/content/CVPR2021/html/Fieraru_AIFit_Automatic_3D_Human-Interpretable_Feedback_Models_for_Fitness_Training_CVPR_2021_paper.html)
 
