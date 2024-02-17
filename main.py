@@ -35,7 +35,7 @@ def initialize_pose_extractor():
         video_file_name = os.getenv("VIDEO_FILE_NAME")
 
         if video_file_name is None:
-            print("No environment variable named VIDEO_FILE_NAME found.")
+            print("Error: No environment variable named VIDEO_FILE_NAME found.")
             return None, False
 
         video_path = os.path.join(
