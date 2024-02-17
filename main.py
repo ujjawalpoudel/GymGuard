@@ -44,7 +44,9 @@ def initialize_pose_extractor():
 
         if check_file_existence(video_path):
             # Create an instance of the PoseLandmarkExtractor class
-            pose_extractor = PoseLandmarkExtractor(video_file_name, project_root_path)
+            pose_extractor = PoseLandmarkExtractor(
+                video_file_name, project_root_path, video_path
+            )
             return pose_extractor, True
         else:
             print("Error: Input video file not found.")
