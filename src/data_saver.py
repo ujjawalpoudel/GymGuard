@@ -56,6 +56,7 @@ class DataSaver:
                 csv_writer = csv.writer(csvfile)
                 header = [
                     "data",
+                    "frame",
                     "left_arm",
                     "right_arm",
                     "left_elbow",
