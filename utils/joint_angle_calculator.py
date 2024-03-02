@@ -65,8 +65,8 @@ def calculate_angle(joint1, joint2, joint3):
     angle_radians = np.arccos(cosine_angle)
 
     # Convert angle to degrees and round to 3 decimal places
-    angle_degrees = np.degrees(angle_radians)
-    return round(angle_degrees, 3)
+    # angle_degrees = np.degrees(angle_radians)
+    return round(angle_radians, 3)
 
 
 def calculate_joint_angles(landmark_positions):

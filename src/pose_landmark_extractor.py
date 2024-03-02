@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import os
+import numpy as np
 from .data_saver import DataSaver
 from utils.folder_manager import ensure_folder_exists
 from utils.joint_angle_calculator import calculate_joint_angles
@@ -147,7 +148,7 @@ class PoseLandmarkExtractor:
         )
         cv2.putText(
             frame,
-            "Angle",
+            "Angle (in degrees)",
             (table_start_x + cell_width + column_spacing, table_start_y),
             font,
             font_scale,
@@ -171,7 +172,7 @@ class PoseLandmarkExtractor:
             )
             cv2.putText(
                 frame,
-                str(angle),
+                str(round(np.degrees(angle), 3)),
                 (
                     table_start_x + cell_width + column_spacing,
                     table_start_y + row_index * cell_height,
