@@ -172,7 +172,7 @@ class PoseLandmarkExtractor:
             )
             cv2.putText(
                 frame,
-                str(round(np.degrees(angle), 3)),
+                str(angle),
                 (
                     table_start_x + cell_width + column_spacing,
                     table_start_y + row_index * cell_height,
