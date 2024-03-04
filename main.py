@@ -88,11 +88,11 @@ def main():
 
         # Delete all image except for all_angle_indices
         cleanup_temp_images(all_angle_indices)
-        print("Success: Temporary images cleaned up.")
+        print("\nSuccess: Temporary images cleaned up.")
 
-        print("Success: Angle peak values calculated.")
-        print("Angle peak values:", angle_peaks)
-        print("All angles:", all_angle_indices)
+        print("\nSuccess: Angle peak values calculated.")
+        print("\nAngle peak values:", angle_peaks)
+        print("\nAll angles:", all_angle_indices)
 
     except Exception as e:
         print(f"Error: {e}")
