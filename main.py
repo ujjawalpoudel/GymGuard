@@ -7,6 +7,16 @@ from src.angle_peak_detector import AnglePeaksDetector
 from utils.image_cleanup import cleanup_temp_images
 
 
+# Function to clear environment variables
+def clear_env():
+    for key in list(os.environ):
+        del os.environ[key]
+
+
+# Clear the environment variables
+clear_env()
+
+
 def load_env_variables():
     """
     Load environment variables from the .env file.
