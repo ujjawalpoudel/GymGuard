@@ -49,12 +49,18 @@ def cleanup_temp_images(all_angle_indices):
             frame_index = int(file_name_without_extension.rsplit("_", 1)[-1])
 
             file_path = os.path.join(source_folder, file_name)
+            dest_file_path = os.path.join(destination_folder, file_name)
 
             # Check if the file is not in the list of files to keep
             if frame_index not in all_angle_indices:
                 # Delete the file
                 os.remove(file_path)
             else:
+                # If the destination folder already contains a file with the same name,
+                # skip moving the file
+                if os.path.exists(dest_file_path):
+                    continue
+
                 # Move the file to the destination folder
                 shutil.move(file_path, destination_folder)
 
