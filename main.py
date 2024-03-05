@@ -117,8 +117,6 @@ def main():
             print("Success: Temporary images cleaned up.")
 
             print("Success: Angle peak values calculated.")
-            print("Angle peak values:", angle_peaks)
-            print("All angles:", all_angle_indices)
 
     except Exception as e:
         print(f"Error: {e}")
