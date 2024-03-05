@@ -1,14 +1,19 @@
 import os
 from dotenv import load_dotenv
+
 from src.project_root_locator import find_project_root
 from src.pose_landmark_extractor import PoseLandmarkExtractor
 from utils.check_file_existence import check_file_existence
 from src.angle_peak_detector import AnglePeaksDetector
 from utils.image_cleanup import cleanup_temp_images
+from utils.file_listing import list_video_files
 
 
 # Function to clear environment variables
 def clear_env():
+    """
+    Clear all environment variables.
+    """
     for key in list(os.environ):
         del os.environ[key]
 
@@ -32,27 +37,22 @@ def load_env_variables():
         return False
 
 
-def initialize_pose_extractor():
+def initialize_pose_extractor(project_root_path, video_file_name, video_path):
     """
     Initialize the PoseLandmarkExtractor instance with required parameters.
+
+    Args:
+        project_root_path (str): The root path of the project.
+        video_file_name (str): The name of the video file.
+        video_path (str): The path of the video file.
 
     Returns:
     - tuple: (PoseLandmarkExtractor instance, success flag).
     """
     try:
-        # Find and store the project root path
-        project_root_path = find_project_root()
-
-        # Access the video file name from environment variables
-        video_file_name = os.getenv("VIDEO_FILE_NAME")
-
         if video_file_name is None:
             print("Error: No environment variable named VIDEO_FILE_NAME found.")
             return None, False
-
-        video_path = os.path.join(
-            project_root_path, "data", "input_videos", video_file_name
-        )
 
         if check_file_existence(video_path):
             # Create an instance of the PoseLandmarkExtractor class
@@ -79,36 +79,51 @@ def main():
             print("Error: Failed to load environment variables.")
             return
 
+        # Find project root directory
+        project_root_path = find_project_root()
+
         # Load environment variables
-        vidoe_filename = os.getenv("VIDEO_FILE_NAME")
+        root_directory = os.getenv("ROOT_DIRECTORY")
 
-        # Initialize PoseLandmarkExtractor
-        pose_extractor, success = initialize_pose_extractor()
-        if not success or pose_extractor is None:
-            print("Error: Failed to initialize PoseLandmarkExtractor.")
-            return
+        # List all video files in the input_videos directory
+        video_files_list = list_video_files(root_directory, project_root_path)
 
-        # Run the pose landmark extraction process
-        pose_extractor.run_extraction()
-        print("Success: Pose landmark extraction completed.")
+        for video_path in video_files_list:
+            print(f"Now processing video: {video_path}")
 
-        # Calculate angle peak values
-        detector = AnglePeaksDetector(vidoe_filename)
-        angle_peaks, all_angle_indices = detector.find_angle_peaks()
+            # Extract file name from video_path
+            video_file_name = os.path.basename(video_path)
 
-        # Delete all image except for all_angle_indices
-        cleanup_temp_images(all_angle_indices)
-        print("\nSuccess: Temporary images cleaned up.")
+            print("Extracted file name:", video_file_name)
 
-        print("\nSuccess: Angle peak values calculated.")
-        print("\nAngle peak values:", angle_peaks)
-        print("\nAll angles:", all_angle_indices)
+            # Initialize PoseLandmarkExtractor
+            pose_extractor, success = initialize_pose_extractor(
+                project_root_path, video_file_name, video_path
+            )
+            if not success or pose_extractor is None:
+                print("Error: Failed to initialize PoseLandmarkExtractor.")
+                return
+
+            # Run the pose landmark extraction process
+            pose_extractor.run_extraction()
+            print("Success: Pose landmark extraction completed.")
+
+            # Calculate angle peak values
+            detector = AnglePeaksDetector(video_file_name)
+            angle_peaks, all_angle_indices = detector.find_angle_peaks()
+
+            # Delete all images except for all_angle_indices
+            cleanup_temp_images(all_angle_indices)
+            print("Success: Temporary images cleaned up.")
+
+            print("Success: Angle peak values calculated.")
+            print("Angle peak values:", angle_peaks)
+            print("All angles:", all_angle_indices)
 
     except Exception as e:
         print(f"Error: {e}")
 
 
-# Check if the script is being run directly
 if __name__ == "__main__":
     # Call the main function
     main()
