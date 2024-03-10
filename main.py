@@ -1,5 +1,4 @@
 import os
-from dotenv import load_dotenv
 
 from src.project_root_locator import find_project_root
 from src.pose_landmark_extractor import PoseLandmarkExtractor
@@ -7,34 +6,7 @@ from utils.check_file_existence import check_file_existence
 from src.angle_peak_detector import AnglePeaksDetector
 from utils.image_cleanup import cleanup_temp_images
 from utils.file_listing import list_video_files
-
-
-# Function to clear environment variables
-def clear_env():
-    """
-    Clear all environment variables.
-    """
-    for key in list(os.environ):
-        del os.environ[key]
-
-
-# Clear the environment variables
-clear_env()
-
-
-def load_env_variables():
-    """
-    Load environment variables from the .env file.
-
-    Returns:
-    - bool: True if successful, False otherwise.
-    """
-    try:
-        load_dotenv()
-        return True
-    except Exception as e:
-        print(f"Error loading environment variables: {e}")
-        return False
+from utils.environment_setup import clear_and_load_env
 
 
 def initialize_pose_extractor(project_root_path, video_file_name, video_path):
@@ -75,7 +47,7 @@ def main():
     """
     try:
         # Load environment variables
-        if not load_env_variables():
+        if not clear_and_load_env():
             print("Error: Failed to load environment variables.")
             return
 
