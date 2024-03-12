@@ -107,86 +107,6 @@ class PoseLandmarkExtractor:
         # Return processed frame and joint angles
         return frame, angle_of_joint
 
-    def draw_table(self, frame, angle_of_joint):
-        """
-        Draw a table on the input frame showing joint names and corresponding angles.
-
-        Args:
-            frame (numpy.ndarray): Input frame as a NumPy array.
-            angle_of_joint (dict): Dictionary containing joint names as keys and corresponding angles as values.
-
-        Returns:
-            numpy.ndarray: Frame with the table drawn.
-
-        Comments:
-            This function draws a table on the input frame to display joint names and their corresponding angles.
-            The table is positioned at the top-left corner of the frame.
-            Each row of the table consists of a joint name and its angle.
-            The table parameters such as cell width, cell height, font scale, and font thickness can be adjusted for customization.
-        """
-        # Define table parameters
-        table_start_x = 20
-        table_start_y = 30
-        cell_width = 500  # Increased cell width for more space
-        cell_height = 30
-        text_color = (0, 0, 0)  # Black color
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        font_scale = 1.0  # Increased font scale for bigger text
-        font_thickness = 2  # Added font thickness for bold text
-        column_spacing = 30  # Increased spacing between columns
-
-        # Draw table headers
-        cv2.putText(
-            frame,
-            "Joint",
-            (table_start_x, table_start_y),
-            font,
-            font_scale,
-            text_color,
-            font_thickness,
-            cv2.LINE_AA,
-        )
-        cv2.putText(
-            frame,
-            "Angle (in degrees)",
-            (table_start_x + cell_width + column_spacing, table_start_y),
-            font,
-            font_scale,
-            text_color,
-            font_thickness,
-            cv2.LINE_AA,
-        )
-
-        # Draw angle data
-        row_index = 1
-        for joint, angle in angle_of_joint.items():
-            cv2.putText(
-                frame,
-                joint,
-                (table_start_x, table_start_y + row_index * cell_height),
-                font,
-                font_scale,
-                text_color,
-                font_thickness,
-                cv2.LINE_AA,
-            )
-            cv2.putText(
-                frame,
-                str(angle),
-                (
-                    table_start_x + cell_width + column_spacing,
-                    table_start_y + row_index * cell_height,
-                ),
-                font,
-                font_scale,
-                text_color,
-                font_thickness,
-                cv2.LINE_AA,
-            )
-            row_index += 1
-
-        return frame
-
     def run_extraction(self):
         """
         Run the pose landmark extraction process on the input video.
@@ -252,8 +172,6 @@ class PoseLandmarkExtractor:
             processed_frame, angle_of_joint = self.process_frame(
                 frame, pose_data_list, frame_index, fps
             )
-
-            processed_frame = self.draw_table(processed_frame, angle_of_joint)
 
             cv2.imshow("Processed Frame", processed_frame)
             out.write(processed_frame)
