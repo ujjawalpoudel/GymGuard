@@ -104,8 +104,8 @@ class PoseLandmarkExtractor:
                     # Initialize Empty temp_pose_data
                     temp_pose_data = []
 
-        # Return processed frame and joint angles
-        return frame, angle_of_joint
+        # Return processed frame
+        return frame
 
     def run_extraction(self):
         """
@@ -151,7 +151,6 @@ class PoseLandmarkExtractor:
         )
 
         pose_data_list = []
-        angle_of_joint = {}
         frame_index = 0
 
         while cap.isOpened():
@@ -169,7 +168,7 @@ class PoseLandmarkExtractor:
             )
             cv2.imwrite(image_output_path, frame)
 
-            processed_frame, angle_of_joint = self.process_frame(
+            processed_frame = self.process_frame(
                 frame, pose_data_list, frame_index, fps
             )
 
