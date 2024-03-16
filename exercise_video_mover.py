@@ -6,7 +6,36 @@ from src.project_root_locator import find_project_root
 project_root = find_project_root()
 
 # Define the list of exercise filenames
-exercise_filenames = ["barbell_dead_row.mp4", "dumbbell_biceps_curls.mp4", "squat.mp4"]
+exercise_filenames = [
+    "band_pull_apart.mp4",
+    "barbell_dead_row.mp4",
+    "barbell_row.mp4",
+    "barbell_shrug.mp4",
+    "burpees.mp4",
+    "clean_and_press.mp4",
+    "deadlift.mp4",
+    "diamond_pushup.mp4",
+    "drag_curl.mp4",
+    "dumbbell_biceps_curls.mp4",
+    "dumbbell_curl_trifecta.mp4",
+    "dumbbell_hammer_curls.mp4",
+    "dumbbell_high_pulls.mp4",
+    "dumbbell_overhead_shoulder_press.mp4",
+    "dumbbell_reverse_lunge.mp4",
+    "dumbbell_scaptions.mp4",
+    "man_maker.mp4",
+    "mule_kick.mp4",
+    "neutral_overhead_shoulder_press.mp4",
+    "one_arm_row.mp4",
+    "overhead_extension_thruster.mp4",
+    "overhead_trap_raises.mp4",
+    "pushup.mp4",
+    "side_lateral_raise.mp4",
+    "squat.mp4",
+    "standing_ab_twists.mp4",
+    "w_raise.mp4",
+    "walk_the_box.mp4",
+]
 
 # Define the main folder where data is stored
 main_folder_name = "train"
@@ -70,3 +99,4 @@ for exercise_filename in exercise_filenames:
                 # Move the exercise video file to the destination folder with the new filename
                 shutil.move(src_file_path, dest_file_path)
                 print(f"Moved {exercise_filename} to {dest_file_path}")
+                print("\n")
