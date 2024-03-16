@@ -92,6 +92,12 @@ class PoseLandmarkExtractor:
                     # Wrap temporary pose data in a list
                     temp_pose_data = [temp_pose_data]
 
+                    # Get exercise name from video_file_name attribute
+                    exercise_name = os.path.splitext(self.video_file_name)[0]
+
+                    # Add exercise name to temp_pose_data
+                    temp_pose_data.append(exercise_name)
+
                     # Append frame index to temporary pose data
                     temp_pose_data.append(frame_index)
 
