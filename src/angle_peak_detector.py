@@ -65,7 +65,7 @@ class AnglePeaksDetector:
             df = pd.read_csv(filepath)
 
             # Calculate the overall deviation percentage for each column
-            df_properties = df.iloc[:, 2:]
+            df_properties = df.iloc[:, 3:]
             deviation_percentage = (
                 (df_properties.max() - df_properties.min()) / df_properties.mean()
             ) * 100
