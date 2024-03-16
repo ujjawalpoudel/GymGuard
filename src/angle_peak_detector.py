@@ -64,6 +64,28 @@ class AnglePeaksDetector:
             # Load CSV data into DataFrame
             df = pd.read_csv(filepath)
 
+            # Calculate the overall deviation percentage for each column
+            df_properties = df.iloc[:, 2:]
+            deviation_percentage = (
+                (df_properties.max() - df_properties.min()) / df_properties.mean()
+            ) * 100
+            sorted_columns = deviation_percentage.sort_values(ascending=False)
+
+            # Define the default value if the environment variable is not set
+            DEFAULT_NUM_COLUMNS_TO_CONSIDER = 3
+
+            # Get the value of NUM_COLUMNS_TO_CONSIDER environment variable
+            num_columns_to_consider = int(
+                os.environ.get(
+                    "NUM_COLUMNS_TO_CONSIDER", DEFAULT_NUM_COLUMNS_TO_CONSIDER
+                )
+            )
+
+            # Get ColumnNames with highest deviation from the sorted_columns
+            column_with_highest_deviation = sorted_columns.index[
+                :num_columns_to_consider
+            ]
+
             # Create an empty list to store angle peaks
             angle_peaks = []
 
@@ -74,7 +96,7 @@ class AnglePeaksDetector:
             all_angle_indices = []
 
             # Iterate through each joint column
-            for i, col in enumerate(JOINTS_NAME):
+            for i, col in enumerate(column_with_highest_deviation):
                 y = df[col]  # Extract the y data for the current joint
 
                 # Find relative maxima (peaks) within a window of frames
