@@ -120,7 +120,7 @@ class AnglePeaksDetector:
 
                 # Add joint's peak indices to angle_peaks list
                 angle_peaks.append(
-                    {"column": df.columns[i + 2], "indices": apex_indices}
+                    {"column": df.columns[i + 3], "indices": apex_indices}
                 )
 
             # Save angle peaks to a new CSV file
