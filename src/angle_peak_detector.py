@@ -126,7 +126,7 @@ class AnglePeaksDetector:
             # Save angle peaks to a new CSV file
             angle_peaks_filepath = filepath.replace("annotated_", "angle_peaks_")
             pd.DataFrame(angle_peaks).to_csv(angle_peaks_filepath, index=False)
-            return angle_peaks, list(set(all_angle_indices))
+            return angle_peaks, sorted(list(set(all_angle_indices)))
         except KeyError as e:
             print(f"Column '{e.args[0]}' not found in the DataFrame.")
             return None
