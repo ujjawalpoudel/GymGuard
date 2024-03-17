@@ -120,11 +120,11 @@ class PoseLandmarkExtractor:
         Returns:
             bool: True if extraction is successful, False otherwise.
         """
-        # Define the output image folder path
-        output_image_folder = os.path.join(
-            self.project_root_path, "data", "output_images", "temp_images"
-        )
-        ensure_folder_exists(output_image_folder)
+        # # Define the output image folder path
+        # output_image_folder = os.path.join(
+        #     self.project_root_path, "data", "output_images", "temp_images"
+        # )
+        # ensure_folder_exists(output_image_folder)
 
         # Define the output video folder path
         output_video_folder = os.path.join(
@@ -166,13 +166,13 @@ class PoseLandmarkExtractor:
                 break
 
             # Split the name of video_file_name
-            file_name = self.video_file_name.split(".")[0]
+            # file_name = self.video_file_name.split(".")[0]
 
-            # Save the frame as an image
-            image_output_path = os.path.join(
-                output_image_folder, f"{file_name}_frame_{frame_index}.jpg"
-            )
-            cv2.imwrite(image_output_path, frame)
+            # # Save the frame as an image
+            # image_output_path = os.path.join(
+            #     output_image_folder, f"{file_name}_frame_{frame_index}.jpg"
+            # )
+            # cv2.imwrite(image_output_path, frame)
 
             processed_frame = self.process_frame(
                 frame, pose_data_list, frame_index, fps
