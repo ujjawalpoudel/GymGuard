@@ -56,7 +56,7 @@ class AngularVelocityCalculator:
             coordinates.append(
                 [data_column[-1]["x"], data_column[-1]["y"], data_column[-1]["z"]]
             )
-            timestamps.append(frame_number)
+            timestamps.append(data_column[-1]["time"])
 
         angular_velocities = []
         # Calculate angular velocity between consecutive frames
