@@ -69,13 +69,28 @@ class AngularVelocityCalculator:
             angular_velocity = displacement_magnitude / delta_t
             angular_velocities.append(angular_velocity)
 
-        # Calculate the range of angular velocity
-        angular_velocity_range = [max(angular_velocities), min(angular_velocities)]
+        # Remove NaN values
+        angular_velocities = [x for x in angular_velocities if not np.isnan(x)]
+
+        # Sort the list
+        sorted_angular_velocities = sorted(angular_velocities)
+
+        # Calculate median
+        median_index = len(sorted_angular_velocities) // 2
+        median = sorted_angular_velocities[median_index]
+
+        # Split data into two clusters based on median
+        min_cluster = [x for x in sorted_angular_velocities if x <= median]
+        max_cluster = [x for x in sorted_angular_velocities if x > median]
+
+        # Find maximum in minimum cluster and minimum in maximum cluster
+        max_in_min_cluster = max(max_cluster)
+        min_in_max_cluster = min(min_cluster)
+
         # Store results in class attribute
         self.results["exercise_name"] = self.filename
-        self.results["max_velocity"] = angular_velocity_range[0]
-        self.results["min_velocity"] = angular_velocity_range[1]
-        print("Range of angular velocity:", angular_velocity_range)
+        self.results["max_velocity"] = max_in_min_cluster
+        self.results["min_velocity"] = min_in_max_cluster
 
     def save_results_to_json(self, output_file):
         """
@@ -121,9 +136,9 @@ def main():
         min_angular_velocity.append(calculator.results["min_velocity"])
         print("\n")
 
-    # Select maximum and minimum value
-    max_angular_velocity_value = max(max_angular_velocity)
-    min_angular_velocity_value = min(min_angular_velocity)
+    # Calculate average value of angular velocity
+    max_angular_velocity_value = sum(max_angular_velocity) / len(max_angular_velocity)
+    min_angular_velocity_value = sum(min_angular_velocity) / len(min_angular_velocity)
 
     update_json_file(
         "angular_velocity_results.json",
