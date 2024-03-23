@@ -181,13 +181,13 @@ def analyze_pose_data(pose_data_list):
     if max_velocity is not None and min_velocity is not None:
         print("\n")
         print(
-            f"For exercise '{exercise_name}':\nMax Velocity: {max_velocity}\nMin Velocity: {min_velocity}\n"
+            f"For exercise '{exercise_name}':\nAverage Max Velocity: {max_velocity}\nAverage Min Velocity: {min_velocity}\n"
         )
 
         if current_max_velocity > max_velocity:
-            print("Warning: You are moving too fast. Please slow down.")
+            print("Warning: Slow down your movements a bit, you're moving pretty fast")
         elif current_min_velocity < min_velocity:
-            print("Warning: You are moving too slow. Please speed up.")
+            print("Warning: Speed up your movements a bit, you're going a bit slow.")
         else:
             print("Great job! Your movement speed is optimal.")
 
@@ -203,5 +203,5 @@ def analyze_pose_data(pose_data_list):
 
 
 if __name__ == "__main__":
-    video_path = "/Users/ujjawalpoudel/Downloads/dumbbell_biceps_curls.mp4"
+    video_path = "/Users/ujjawalpoudel/Downloads/dumbbell_biceps_curls_s13.MP4"
     process_video(video_path)
