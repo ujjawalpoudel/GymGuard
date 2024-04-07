@@ -47,7 +47,7 @@ class AngularVelocityCalculator:
 
         angles = []
         timestamps = []
-        all_frame_indices.insert(0, 0)  # Include frame 0 in all_frame_indices
+        all_frame_indices.insert(0, 1)  # Include frame 1 in all_frame_indices
 
         # Extract angles and timestamps from annotated data
         for frame_number in all_frame_indices:
