@@ -100,6 +100,7 @@ class AngularVelocityCalculator:
 
         # Store results in class attribute
         self.results["exercise_name"] = self.filename
+        self.results["joint_angle"] = single_changing_index
         self.results["max_velocity"] = max_in_min_cluster
         self.results["min_velocity"] = min_in_max_cluster
 
@@ -159,6 +160,7 @@ def main():
         "dumbbell_biceps_curls",
         max_angular_velocity_value,
         min_angular_velocity_value,
+        calculator.results["joint_angle"],
     )
 
 
