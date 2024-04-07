@@ -1,4 +1,5 @@
 import cv2
+import math
 import mediapipe as mp
 import pandas as pd
 import numpy as np
@@ -19,16 +20,19 @@ def get_velocity_data(exercise_name, file_path):
     Returns:
         tuple: A tuple containing the max and min velocity for the exercise.
     """
-    with open(file_path, "r") as file:
-        data = json.load(file)
+    with open(file_path, "r") as json_file:
+        data = json.load(json_file)
         if exercise_name in data:
             exercise_data = data[exercise_name]
-            return exercise_data.get("max_velocity"), exercise_data.get("min_velocity")
+            joint_angle, velocity_info = exercise_data.popitem()
+            max_velocity = velocity_info.get("max_velocity")
+            min_velocity = velocity_info.get("min_velocity")
+            return max_velocity, min_velocity, joint_angle
         else:
-            return None, None
+            return None, None, None
 
 
-def process_video(video_path):
+def process_video(video_path, exercise_name, file_path):
     """
     Process the input video, extract pose data, and calculate velocities.
 
@@ -64,23 +68,11 @@ def process_video(video_path):
             landmarks = results.pose_landmarks.landmark
             angle_of_joint = calculate_joint_angles(landmarks)
 
-            # Append pose data
             for idx, landmark in enumerate(landmarks):
                 frame_time = frame_count / fps
-                temp_pose_data.append(
-                    {
-                        "x": landmark.x,
-                        "y": landmark.y,
-                        "z": landmark.z,
-                        "visibility": landmark.visibility,
-                        "landmark": idx,
-                        "time": frame_time,
-                        "frame_index": frame_count,
-                    }
-                )
 
                 if idx == 32:
-                    temp_pose_data = [temp_pose_data]
+                    temp_pose_data.append(frame_time)
                     temp_pose_data.append(frame_count)
                     temp_pose_data.extend(list(angle_of_joint.values()))
                     pose_data_list.append(temp_pose_data)
@@ -91,7 +83,7 @@ def process_video(video_path):
             break
 
         if frame_count == 200:
-            if not analyze_pose_data(pose_data_list):
+            if not analyze_pose_data(pose_data_list, exercise_name, file_path):
                 raise ValueError
             pose_data_list = []
             frame_count = 0
@@ -100,7 +92,7 @@ def process_video(video_path):
     cv2.destroyAllWindows()
 
 
-def analyze_pose_data(pose_data_list):
+def analyze_pose_data(pose_data_list, exercise_name, file_path):
     """
     Analyze pose data, calculate velocities, and compare with predefined thresholds.
 
@@ -111,7 +103,7 @@ def analyze_pose_data(pose_data_list):
         bool: True if analysis is successful, False otherwise.
     """
     column_names = [
-        "data",
+        "timestamp",
         "frame",
         "left_arm",
         "right_arm",
@@ -132,54 +124,58 @@ def analyze_pose_data(pose_data_list):
 
     df[JOINTS_NAME] = df[JOINTS_NAME].rolling(window=90, min_periods=1).mean()
 
-    deviation_percentage = (
-        (df.iloc[:, 3:].max() - df.iloc[:, 3:].min()) / df.iloc[:, 3:].mean()
-    ) * 100
-    sorted_columns = deviation_percentage.sort_values(ascending=False)
-    num_columns_to_consider = 1
-    column_with_highest_deviation = sorted_columns.index[:num_columns_to_consider]
+    max_velocity, min_velocity, joint_angle = get_velocity_data(
+        exercise_name, file_path
+    )
 
-    all_angle_indices = [df.iloc[0]["frame"]]
-    for col in column_with_highest_deviation:
-        y = df[col].values
-        peaks_indices = argrelextrema(y, np.greater, order=100)[0]
-        valleys_indices = argrelextrema(y, np.less, order=100)[0]
-        apex_indices = np.sort(np.concatenate([peaks_indices, valleys_indices]))
-        all_angle_indices.extend([int(x) for x in apex_indices])
+    all_angle_indices = [1]
+    y = df[joint_angle].values
+    peaks_indices = argrelextrema(y, np.greater, order=100)[0]
+    valleys_indices = argrelextrema(y, np.less, order=100)[0]
+    apex_indices = np.sort(np.concatenate([peaks_indices, valleys_indices]))
 
-    all_angle_indices.append(df.iloc[-1]["frame"])
-    all_angle_indices.sort()
+    all_angle_indices.extend([int(x) for x in apex_indices])
 
-    coordinates = []
+    angles = []
     timestamps = []
+
+    # Extract angles and timestamps from annotated data
     for frame_number in all_angle_indices:
         row = df[df["frame"] == frame_number]
-        data_column = row["data"].iloc[0]
-        coordinates.append(
-            [data_column[-1]["x"], data_column[-1]["y"], data_column[-1]["z"]]
-        )
-        timestamps.append(data_column[-1]["time"])
+        angles.append(row[joint_angle].iloc[0])
+        timestamps.append(row["timestamp"].iloc[0])
 
     angular_velocities = []
-    for i in range(len(coordinates) - 1):
-        coord_current, coord_next = coordinates[i], coordinates[i + 1]
+    # Calculate angular velocity between consecutive frames
+    for i in range(len(angles) - 1):
+        angle_current, angle_next = angles[i], angles[i + 1]
         timestamp_current, timestamp_next = timestamps[i], timestamps[i + 1]
-        displacement = np.array(coord_next) - np.array(coord_current)
-        delta_t = timestamp_next - timestamp_current
-        displacement_magnitude = np.linalg.norm(displacement)
-        angular_velocity = displacement_magnitude / delta_t
-        angular_velocities.append(angular_velocity)
 
+        # Convert angles from degrees to radians
+        theta1_rad = math.radians(angle_current)
+        theta2_rad = math.radians(angle_next)
+
+        # Calculate change in angle
+        delta_theta = theta2_rad - theta1_rad
+
+        # Calculate change in time
+        delta_t = timestamp_next - timestamp_current
+
+        # Calculate average angular velocity
+        average_angular_velocity = delta_theta / delta_t
+
+        angular_velocities.append(average_angular_velocity)
+
+    # Remove NaN values
+    angular_velocities = [x for x in angular_velocities if not np.isnan(x)]
+
+    # Sort the list
+    sorted_angular_velocities = sorted(angular_velocities)
     current_max_velocity, current_min_velocity = max(angular_velocities), min(
         angular_velocities
     )
 
-    exercise_name = "dumbbell_biceps_curls"
-    file_path = "angular_velocity_results.json"
-    max_velocity, min_velocity = get_velocity_data(exercise_name, file_path)
-
     if max_velocity is not None and min_velocity is not None:
-        print("\n")
         print(
             f"For exercise '{exercise_name}':\nAverage Max Velocity: {max_velocity}\nAverage Min Velocity: {min_velocity}\n"
         )
@@ -191,17 +187,19 @@ def analyze_pose_data(pose_data_list):
         else:
             print("Great job! Your movement speed is optimal.")
 
-        print("\n")
         print(
             f"Current Max Velocity: {current_max_velocity}\nCurrent Min Velocity: {current_min_velocity}"
         )
     else:
         print(f"No data found for exercise '{exercise_name}'")
 
-    print("\n")
     return True
 
 
 if __name__ == "__main__":
-    video_path = "/Users/ujjawalpoudel/Downloads/dumbbell_biceps_curls_s13.MP4"
-    process_video(video_path)
+    video_path = (
+        "data/train/dumbbell_biceps_curls/dumbbell_biceps_curls_60457274_s03_13ang.mp4"
+    )
+    exercise_name = "dumbbell_biceps_curls"
+    file_path = "angular_velocity_results.json"
+    process_video(video_path, exercise_name, file_path)
