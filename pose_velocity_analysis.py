@@ -6,10 +6,9 @@ import numpy as np
 import json
 from utils.joint_angle_calculator import calculate_joint_angles
 from scipy.signal import argrelextrema
-from constant import JOINTS_NAME
 
 
-def get_velocity_data(exercise_name, file_path):
+def retrieve_velocity_data(exercise_name, file_path):
     """
     Retrieve max and min velocity data for a given exercise from a JSON file.
 
@@ -105,6 +104,10 @@ def analyze_pose_data(pose_data_list, exercise_name, file_path):
     column_names = [
         "timestamp",
         "frame",
+    ]
+
+    # JOINTS_NAME : Name of the joints which we track for angle
+    JOINTS_NAME = [
         "left_arm",
         "right_arm",
         "left_elbow",
@@ -120,11 +123,14 @@ def analyze_pose_data(pose_data_list, exercise_name, file_path):
         "leg_spread",
     ]
 
+    # Extend column name
+    column_names.extend(JOINTS_NAME)
+
     df = pd.DataFrame(pose_data_list, columns=column_names)
 
     df[JOINTS_NAME] = df[JOINTS_NAME].rolling(window=90, min_periods=1).mean()
 
-    max_velocity, min_velocity, joint_angle = get_velocity_data(
+    max_velocity, min_velocity, joint_angle = retrieve_velocity_data(
         exercise_name, file_path
     )
 
