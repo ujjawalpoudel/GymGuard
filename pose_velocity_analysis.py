@@ -169,8 +169,6 @@ def analyze_pose_data(pose_data_list, exercise_name, file_path):
     # Remove NaN values
     angular_velocities = [x for x in angular_velocities if not np.isnan(x)]
 
-    # Sort the list
-    sorted_angular_velocities = sorted(angular_velocities)
     current_max_velocity, current_min_velocity = max(angular_velocities), min(
         angular_velocities
     )
