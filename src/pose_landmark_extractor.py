@@ -74,23 +74,25 @@ class PoseLandmarkExtractor:
                 # Calculate time in seconds
                 frame_time = frame_index / fps
 
-                # Append landmark data to temporary pose data list
-                temp_pose_data.append(
-                    {
-                        "x": landmark.x,
-                        "y": landmark.y,
-                        "z": landmark.z,
-                        "visibility": landmark.visibility,
-                        "landmark": idx,
-                        "time": frame_time,  # Time in Seconds
-                        "frame_index": frame_index,
-                    }
-                )
+                # # Append landmark data to temporary pose data list
+                # temp_pose_data.append(
+                #     {
+                #         "x": landmark.x,
+                #         "y": landmark.y,
+                #         "z": landmark.z,
+                #         "visibility": landmark.visibility,
+                #         "landmark": idx,
+                #         "time": frame_time,  # Time in Seconds
+                #         "frame_index": frame_index,
+                #     }
+                # )
 
                 # Check if index is 32
                 if idx == 32:
                     # Wrap temporary pose data in a list
-                    temp_pose_data = [temp_pose_data]
+                    # temp_pose_data = [temp_pose_data]
+                    
+                    temp_pose_data.append(frame_time)
 
                     # Get exercise name from video_file_name attribute
                     exercise_name = os.path.splitext(self.video_file_name)[0]

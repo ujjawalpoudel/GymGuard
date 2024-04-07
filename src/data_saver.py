@@ -55,7 +55,7 @@ class DataSaver:
             with open(output_csv_path, "w", newline="") as csvfile:
                 csv_writer = csv.writer(csvfile)
                 header = [
-                    "data",
+                    "timestamp",
                     "label",
                     "frame",
                     "left_arm",
